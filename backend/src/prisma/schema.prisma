@@ -1,0 +1,63 @@
+generator client {
+    provider        = "prisma-client-js"
+    previewFeatures = ["fullTextSearch"]
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id               String           @id @default(uuid())
+    name             String
+    email            String           @unique
+    password         String
+    avatar           String?
+    createdAt        DateTime         @default(now())
+    updatedAt        DateTime         @updatedAt
+    collections      Collection[]
+    collectionsLikes CollectionLike[]
+    permissions      UserPermission[]
+}
+
+enum UserPermission {
+    BLOCK_COLLECTION
+    ALL
+}
+
+model Collection {
+    id              String           @id @default(uuid())
+    title           String
+    description     String?
+    isPublic        Boolean          @default(false)
+    language        String
+    createdAt       DateTime         @default(now())
+    updatedAt       DateTime         @updatedAt
+    authorId        String
+    author          User             @relation(fields: [authorId], references: [id])
+    collectionLikes CollectionLike[]
+    words           Word[]
+    blockedAt       DateTime?
+}
+
+model CollectionLike {
+    id           String     @id @default(uuid())
+    createdAt    DateTime   @default(now())
+    collectionId String
+    collection   Collection @relation(fields: [collectionId], references: [id])
+    userId       String
+    user         User       @relation(fields: [userId], references: [id])
+
+    @@unique([collectionId, userId])
+}
+
+model Word {
+    id           String     @id @default(uuid())
+    term         String
+    definition   String
+    createdAt    DateTime   @default(now())
+    updatedAt    DateTime   @updatedAt
+    collectionId String
+    collection   Collection @relation(fields: [collectionId], references: [id])
+}
