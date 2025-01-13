@@ -1,12 +1,7 @@
 import { useState } from 'react'
 
 function App() {
-
-    return (
-        <>
-            
-        </>
-    )
+    return <></>
 }
 
 export default App

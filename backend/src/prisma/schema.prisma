@@ -16,8 +16,8 @@ model User {
     avatar           String?
     createdAt        DateTime         @default(now())
     updatedAt        DateTime         @updatedAt
-    collections      Collection[]
-    collectionsLikes CollectionLike[]
+    collections      Collection[]     
+    collectionsLikes CollectionLike[] 
     permissions      UserPermission[]
 }
 
@@ -36,8 +36,8 @@ model Collection {
     updatedAt       DateTime         @updatedAt
     authorId        String
     author          User             @relation(fields: [authorId], references: [id])
-    collectionLikes CollectionLike[]
-    words           Word[]
+    collectionLikes CollectionLike[]  
+    words           Word[]            
     blockedAt       DateTime?
 }
 
@@ -45,19 +45,20 @@ model CollectionLike {
     id           String     @id @default(uuid())
     createdAt    DateTime   @default(now())
     collectionId String
-    collection   Collection @relation(fields: [collectionId], references: [id])
+    collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade) // Каскадное удаление при удалении коллекции
     userId       String
-    user         User       @relation(fields: [userId], references: [id])
+    user         User       @relation(fields: [userId], references: [id], onDelete: Cascade) // Каскадное удаление при удалении пользователя
 
     @@unique([collectionId, userId])
 }
 
 model Word {
     id           String     @id @default(uuid())
-    term         String
-    definition   String
+    original     String
+    translation  String
+    language     String
     createdAt    DateTime   @default(now())
     updatedAt    DateTime   @updatedAt
     collectionId String
-    collection   Collection @relation(fields: [collectionId], references: [id])
+    collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade) // Каскадное удаление при удалении коллекции
 }
