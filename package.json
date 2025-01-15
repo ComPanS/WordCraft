@@ -18,7 +18,7 @@
         "hl": "heroku login && heroku container:login",
         "dph": "docker push registry.heroku.com/wordcraftinfo/web",
         "hr": "heroku container:release web -a wordcraftinfo",
-        "prepare": "husky install"
+        "prepare": "husky"
     },
     "dependencies": {
         "cron": "^3.5.0",
