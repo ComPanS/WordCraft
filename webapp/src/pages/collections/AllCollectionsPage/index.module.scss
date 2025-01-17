@@ -1,0 +1,25 @@
+@use '../../../styles/_vars' as vars;
+@use '../../../styles/_mixins' as mixins;
+
+.all_collections {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+
+    .collection {
+        border: 1px solid vars.$black;
+        border-radius: vars.$borderRadiusSmall;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        h2 {
+            @include mixins.h2;
+
+            a:hover {
+                color: vars.$blue;
+            }
+        }
+    }
+}

@@ -1,10 +1,26 @@
 import { PrismaClient, Prisma } from '@prisma/client'
 import { Request, Response } from 'express'
+import { ExpectedError } from '../../../lib/error'
 
 export const deleteCollectionRoute = async (req: Request, res: Response): Promise<void> => {
     const prisma = new PrismaClient()
     const collectionId = req.params.id
+    const userId = req.userId // Assuming user ID is stored in req.user
 
+    // Проверка, является ли пользователь владельцем коллекции
+    const collection = await prisma.collection.findUnique({
+        where: {
+            id: collectionId,
+        },
+        select: {
+            authorId: true,
+        },
+    })
+
+    if (!collection || collection.authorId !== userId) {
+        throw new ExpectedError('You are not the owner of this collection')
+        return
+    }
     try {
         // Удаление коллекции
         await prisma.collection.delete({

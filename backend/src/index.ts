@@ -35,7 +35,11 @@ void (async () => {
     try {
         const app = express()
         app.use(express.json())
-        app.use(cors())
+        const corsOptions = {
+            origin: 'http://localhost:8000', // Укажите точный источник
+            credentials: true, // Разрешите отправку учетных данных (например, куки)
+        }
+        app.use(cors(corsOptions))
 
         app.post('/api/auth/sign-in', signInValidation, handleValidationErrors, signInRoute)
         app.post('/api/auth/sign-up', signUpValidation, handleValidationErrors, signUpRoute)

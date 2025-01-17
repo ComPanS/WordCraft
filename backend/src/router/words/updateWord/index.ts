@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import { Request, Response } from 'express'
+import { ExpectedError } from '../../../lib/error'
 
 export const updateWordRoute = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -14,6 +15,19 @@ export const updateWordRoute = async (req: Request, res: Response): Promise<void
         if (!word) {
             res.status(404).json({ error: 'Word not found' })
             return
+        }
+
+        const authorId = await prisma.collection.findUnique({
+            where: {
+                id: word.collectionId,
+            },
+            select: {
+                authorId: true,
+            },
+        })
+
+        if (authorId?.authorId !== req.userId) {
+            throw new ExpectedError('You are not the author of this collection')
         }
 
         const { original, translation } = req.body

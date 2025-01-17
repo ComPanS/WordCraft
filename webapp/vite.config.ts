@@ -5,11 +5,11 @@ import autoprefixer from 'autoprefixer'
 import { visualizer } from 'rollup-plugin-visualizer'
 import { defineConfig, loadEnv } from 'vite'
 import svgr from 'vite-plugin-svgr'
-// import { parsePublicEnv } from './src/lib/parsePublicEnv'
+import { parsePublicEnv } from './src/lib/parsePublicEnv'
 
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd(), '')
-    // const publicEnv = parsePublicEnv(env)
+    const publicEnv = parsePublicEnv(env)
 
     if (env.HOST_ENV !== 'local') {
         if (!env.SENTRY_AUTH_TOKEN) {
@@ -59,7 +59,7 @@ export default defineConfig(({ mode }) => {
             port: +env.PORT,
         },
         define: {
-            // 'process.env': publicEnv,
+            'process.env': publicEnv,
         },
     }
 })

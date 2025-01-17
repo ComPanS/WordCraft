@@ -17,6 +17,10 @@ export const updateCollectionRoute = async (req: Request, res: Response): Promis
             throw new ExpectedError('Collection not found')
         }
 
+        if (post.authorId !== req.userId) {
+            throw new ExpectedError('You are not the owner of this collection')
+        }
+
         const { title, description, isPublic, language } = req.body
 
         const updatedCollection = await prisma.collection.update({
