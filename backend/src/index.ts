@@ -25,11 +25,14 @@ import { updateCollectionRoute } from './router/collections/updateCollection'
 import { blockCollectionRoute } from './router/collections/blockCollection'
 import { setCollectionLikeRoute } from './router/collections/setCollectionLike'
 import { deleteCollectionRoute } from './router/collections/deleteCollection'
+import { getOwnCollectionsRoute } from './router/collections/getOwnCollections'
 
 import { createWordRoute } from './router/words/createWord'
+import { deleteWordRoute } from './router/words/deleteWord'
 import { getWordRoute } from './router/words/getWord'
 import { getWordsRoute } from './router/words/getWords'
 import { updateWordRoute } from './router/words/updateWord'
+import { getRandomWordsFromCollection } from './router/words/getRandomWords'
 
 void (async () => {
     try {
@@ -60,6 +63,7 @@ void (async () => {
             handleValidationErrors,
             createCollectionRoute
         )
+        app.get('/api/collections/own', checkAuth, getOwnCollectionsRoute)
         app.get('/api/collections/:id', getCollectionRoute)
         app.get('/api/collections', getCollectionsRoute)
         app.patch(
@@ -81,8 +85,10 @@ void (async () => {
             createWordRoute
         )
         app.get('/api/words/:id', checkAuth, handleValidationErrors, getWordRoute)
+        app.delete('/api/word/:id/delete', checkAuth, deleteWordRoute)
         app.get('/api/collections/:id/words', getWordsRoute)
-        app.patch('/api/word/:id', checkAuth, createWordValidation, handleValidationErrors, updateWordRoute)
+        app.patch('/api/word/:id/updateword', checkAuth, createWordValidation, handleValidationErrors, updateWordRoute)
+        app.post('/api/collections/:id/randomwords', getRandomWordsFromCollection)
 
         app.listen(env.PORT, () => {
             console.info('Server is running on http://localhost:' + env.PORT)

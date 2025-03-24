@@ -16,7 +16,9 @@ export const signUpRoute = async (req: Request, res: Response): Promise<void> =>
         })
 
         if (exUserWithEmail) {
-            throw new ExpectedError('User with this email already exists')
+            res.status(400).json({ message: 'User with this email already exists' })
+            return
+            // throw new ExpectedError('User with this email already exists')
         }
 
         const hashedPassword = await getPasswordHash(password)

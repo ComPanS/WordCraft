@@ -1,0 +1,101 @@
+@use '../../../styles/_vars' as vars;
+@use '../../../styles/_mixins' as mixins;
+@use '../../../../node_modules/include-media/dist/_include-media' as *;
+@use 'sass:math';
+@use 'sass:color';
+
+h2 {
+    @include mixins.h2;
+}
+
+table {
+    max-width: 600px;
+    // width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: vars.$defaultFontSize;
+    font-family: vars.$defaultFontFamily;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    border-radius: vars.$borderRadiusBig;
+    overflow: hidden;
+    background-color: vars.$defaultBackgroundColor;
+    color: vars.$defaultTextColor;
+
+    thead tr {
+        background-color: vars.$blue;
+        color: vars.$white;
+
+        th {
+            padding: 12px 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+    }
+
+    tbody {
+        tr {
+            border-bottom: 1px solid vars.$grayLight;
+
+            &:nth-of-type(even) {
+                background-color: vars.$grayLight;
+            }
+
+            &:last-of-type {
+                border-bottom: 2px solid vars.$blue;
+            }
+
+            &:hover {
+                background-color: color.adjust(vars.$grayLight, $lightness: -5%);
+                cursor: pointer;
+            }
+
+            td {
+                max-width: 500px;
+                padding: 12px 15px;
+                font-weight: 400;
+                overflow: hidden;
+            }
+        }
+    }
+}
+
+/* Кнопки в таблице */
+.table-actions {
+    display: flex;
+    gap: 10px;
+
+    button {
+        @include mixins.link(vars.$blue, vars.$red);
+        padding: 5px 10px;
+        border-radius: vars.$borderRadiusSmall;
+        font-size: vars.$defaultFontSize;
+
+        &:hover {
+            background-color: rgba(vars.$blue, 0.1);
+        }
+    }
+}
+
+// /* Адаптивность */
+// @include media('<=tablet') {
+//     .table {
+//         font-size: math.div(vars.$defaultFontSize, 1.2);
+
+//         th,
+//         td {
+//             padding: 10px;
+//         }
+//     }
+// }
+
+// @include media('<=phone') {
+//     .table {
+//         font-size: math.div(vars.$defaultFontSize, 1.5);
+
+//         th,
+//         td {
+//             padding: 8px;
+//         }
+//     }
+// }

@@ -22,6 +22,8 @@ export const getMeRoute = async (req: Request, res: Response): Promise<void> => 
             email: user.email,
             name: user.name,
             avatar: user.avatar,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt,
         })
     } catch (error) {
         if (error instanceof ExpectedError) {

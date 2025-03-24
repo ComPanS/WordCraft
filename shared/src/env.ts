@@ -11,11 +11,13 @@ const getSharedEnvVariable = (key: string) =>
 const sharedEnvRaw = {
     CLOUDINARY_CLOUD_NAME: getSharedEnvVariable('CLOUDINARY_CLOUD_NAME'),
     WEBAPP_URL: getSharedEnvVariable('WEBAPP_URL'),
+    BACKEND_URL: getSharedEnvVariable('BACKEND_URL'),
 }
 
 const zEnv = z.object({
     CLOUDINARY_CLOUD_NAME: zEnvNonemptyTrimmed,
     WEBAPP_URL: zEnvNonemptyTrimmed,
+    BACKEND_URL: zEnvNonemptyTrimmed,
 })
 
 export const sharedEnv = zEnv.parse(sharedEnvRaw)

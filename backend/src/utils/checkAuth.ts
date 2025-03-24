@@ -7,11 +7,9 @@ import { env } from '../lib/env'
 
 export default async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const token = (req.headers.authorization || '').replace(/Bearer\s?/, '')
-
     if (token) {
         try {
             const decoded = jwt.verify(token, env.JWT_SECRET) as jwt.JwtPayload
-
             req.userId = decoded.userId
             next()
             return

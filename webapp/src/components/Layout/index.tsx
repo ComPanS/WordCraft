@@ -1,12 +1,31 @@
 import { createRef } from 'react'
-import { UseDispatch, useSelector } from 'react-redux'
-import { Link, Outlet } from 'react-router-dom'
-import { getAllCollectionsRoute } from '../../lib/routes'
+import { useDispatch, UseDispatch, useSelector } from 'react-redux'
+import { Link, Outlet, useNavigate } from 'react-router-dom'
+import {
+    getAllCollectionsRoute,
+    getSignInRoute,
+    getSignUpRoute,
+    getCreateCollectionRoute,
+    getOwnCollectionRoute,
+    getProfileRoute,
+} from '../../lib/routes'
 import css from './index.module.scss'
+import { resetUserData } from '../../../redux/slices/auth'
 
 export const layoutContentElRef = createRef<HTMLDivElement>()
 
 export const Layout = () => {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    const user = useSelector((state: any) => state.auth.data)
+
+    const logout = () => {
+        localStorage.removeItem('token')
+        dispatch(resetUserData())
+        navigate('/')
+    }
+
     return (
         <div className={css.layout}>
             <div className={css.navigation}>
@@ -17,6 +36,44 @@ export const Layout = () => {
                             All Collections
                         </Link>
                     </li>
+
+                    {!user ? (
+                        <>
+                            <li className={css.item}>
+                                <Link className={css.link} to={getSignInRoute()}>
+                                    Sign In
+                                </Link>
+                            </li>
+                            <li className={css.item}>
+                                <Link className={css.link} to={getSignUpRoute()}>
+                                    Sign Up
+                                </Link>
+                            </li>
+                        </>
+                    ) : (
+                        <>
+                            <li className={css.item}>
+                                <Link className={css.link} to={getCreateCollectionRoute()}>
+                                    Create Collection
+                                </Link>
+                            </li>
+                            <li className={css.item}>
+                                <Link className={css.link} to={getOwnCollectionRoute()}>
+                                    Own Collections
+                                </Link>
+                            </li>
+                            <li className={css.item}>
+                                <Link className={css.link} to={getProfileRoute()}>
+                                    Profile
+                                </Link>
+                            </li>
+                            <li className={css.item}>
+                                <p className={css.link} onClick={logout}>
+                                    LogOut
+                                </p>
+                            </li>
+                        </>
+                    )}
                     {/* {me ? (
               <>
                 <li className={css.item}>

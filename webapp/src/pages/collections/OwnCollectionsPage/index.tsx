@@ -1,36 +1,36 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchCollections } from '../../../../redux/slices/collections'
+import { fetchOwnCollections } from '../../../../redux/slices/collections'
 import { type AppDispatch } from '../../../../redux/store'
 import { Link } from 'react-router-dom'
 import styles from './index.module.scss'
 import { getViewCollectionRoute } from '../../../lib/routes'
 
-export const AllCollectionsPage = () => {
-    const { collections, collectionsStatus } = useSelector(
-        (state: { collections: { collections: any; collectionsStatus: any } }) => state.collections
+export const OwnCollectionsPage = () => {
+    const { ownCollections, ownCollectionsStatus } = useSelector(
+        (state: { collections: { ownCollections: any; ownCollectionsStatus: any } }) => state.collections
     )
-    const postsLoading = collectionsStatus === 'loading'
+    const postsLoading = ownCollectionsStatus === 'loading'
     const dispatch = useDispatch<AppDispatch>()
     const [sortBy, setSortBy] = useState<'date' | 'title' | 'likes'>('date') // Добавлен вариант 'likes'
     const [searchQuery, setSearchQuery] = useState('') // Состояние для хранения поискового запроса
-    const [filteredCollections, setFilteredCollections] = useState(collections) // Состояние для хранения отфильтрованных коллекций
+    const [filteredCollections, setFilteredCollections] = useState(ownCollections) // Состояние для хранения отфильтрованных коллекций
 
     React.useEffect(() => {
-        dispatch(fetchCollections())
+        dispatch(fetchOwnCollections())
     }, [dispatch])
 
     // Эффект для фильтрации коллекций с задержкой
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
-            const filtered = collections.filter((collection: any) =>
+            const filtered = ownCollections.filter((collection: any) =>
                 collection.title.toLowerCase().includes(searchQuery.toLowerCase())
             )
             setFilteredCollections(filtered)
         }, 1000) // Задержка в 1 секунду
 
         return () => clearTimeout(delayDebounceFn)
-    }, [searchQuery, collections])
+    }, [searchQuery, ownCollections])
 
     const truncateDescription = (text: string, maxLength: number = 100) => {
         if (text.length > maxLength) {
@@ -62,8 +62,6 @@ export const AllCollectionsPage = () => {
     if (postsLoading) {
         return null
     }
-
-    console.log(collections)
 
     return (
         <div className={styles.all_collections}>

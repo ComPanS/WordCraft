@@ -2,12 +2,15 @@ import axios from 'axios'
 import { sharedEnv } from '@wordcraft/shared/src/env'
 
 const instance = axios.create({
-    baseURL: sharedEnv.WEBAPP_URL,
+    baseURL: sharedEnv.BACKEND_URL,
     withCredentials: true,
 })
 
-instance.interceptors.response.use((config) => {
-    config.headers.Authorization = localStorage.getItem('token')
+instance.interceptors.request.use((config) => {
+    const token = localStorage.getItem('token')
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`
+    }
     return config
 })
 
